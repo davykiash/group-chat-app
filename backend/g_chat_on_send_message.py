@@ -128,7 +128,7 @@ def send_direct_message(token, json_obj):
     #print(req.text)
 
 
-def save_message_to_store(record_uuid, profile_uuid, message_datetime, message, dynamodb=None):
+def save_message_to_store(group_id, username, message_datetime, message, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb',
                                   aws_access_key_id=DYNAMODB_AWS_KEY,
@@ -138,13 +138,11 @@ def save_message_to_store(record_uuid, profile_uuid, message_datetime, message, 
     table = dynamodb.Table('chat_messages')
 
     try:
-        datetime_profile_uuid = message_datetime + '#' + profile_uuid
-        response = table.put_item(Item={'record_uuid': record_uuid,
-                                        'datetime#profile_uuid': datetime_profile_uuid,
-                                        'profile_uuid': profile_uuid,
-                                        'chat_message_type': 'text',
-                                        'chat_message': message,
-                                        'datetime_message': message_datetime})
+        
+        response = table.put_item(Item={'group_id': group_id,
+                                        'date_time': message_datetime,
+                                        'username': username,
+                                        'chat_message': message})
     except ClientError as e:
         print(e.response['Error']['Message'])
     else:
