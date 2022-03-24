@@ -31,17 +31,17 @@ def my_handler(event, context):
     connection_id = event["requestContext"]["connectionId"]
     # print(connection_id)
 
-    # get record uuid and profile uuid
+    # get connection details
     connection_details = get_connection_details(connection_id)
     if connection_details:
 
         # message datetime
         message_datetime = datetime.utcnow().isoformat()
 
-        # record uuid
+        # group_id
         group_id = connection_details[0]["group_id"]
 
-        # profile uuid
+        # username
         username = connection_details[0]["username"]
 
 		# get all messages
